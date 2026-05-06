@@ -17,6 +17,11 @@ def health():
     return jsonify({"status": "healthy"}), 200
 
 
+@app.route("/version")
+def version():
+    return jsonify({"version": "1.1.0", "day": "Day 6"})
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
 
