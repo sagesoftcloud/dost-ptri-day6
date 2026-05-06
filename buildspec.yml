@@ -17,14 +17,11 @@ phases:
 
   build:
     commands:
-      - echo "Packaging application..."
-      - zip -r app.zip app.py requirements.txt appspec.yml scripts/
-
-  post_build:
-    commands:
       - echo "Build completed on $(date)"
 
 artifacts:
   files:
-    - app.zip
-  discard-paths: yes
+    - app.py
+    - requirements.txt
+    - appspec.yml
+    - scripts/**/*
