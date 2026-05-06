@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Day 6 Lab — S3 Bucket with Versioning.
+  DOST PTRI AWS Fundamentals Training Program.
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: Unique name for the S3 bucket (must be globally unique, lowercase)
+    AllowedPattern: ^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$
+    ConstraintDescription: Bucket name must be lowercase, 3-63 characters, no uppercase or underscores.
+
+  Environment:
+    Type: String
+    Default: training
+    AllowedValues:
+      - training
+      - development
+      - staging
+    Description: Environment tag for the bucket
+
+Resources:
+  TrainingBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Project
+          Value: DOST-PTRI-Training
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Day
+          Value: Day6-Lab
+
+Outputs:
+  BucketName:
+    Description: Name of the created S3 bucket
+    Value: !Ref TrainingBucket
+
+  BucketARN:
+    Description: ARN of the created S3 bucket
+    Value: !GetAtt TrainingBucket.Arn
+
+  BucketDomainName:
+    Description: Domain name of the bucket
+    Value: !GetAtt TrainingBucket.DomainName

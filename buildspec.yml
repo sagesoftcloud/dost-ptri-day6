@@ -1,0 +1,30 @@
+# buildspec.yml — AWS CodeBuild instructions
+# This file tells CodeBuild how to build and test the application.
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt
+
+  pre_build:
+    commands:
+      - echo "Running tests..."
+      - python -m pytest test_app.py -v
+
+  build:
+    commands:
+      - echo "Packaging application..."
+      - zip -r app.zip app.py requirements.txt appspec.yml scripts/
+
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+
+artifacts:
+  files:
+    - app.zip
+  discard-paths: yes
